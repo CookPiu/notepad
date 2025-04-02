@@ -49,19 +49,26 @@ private slots:
     void on_actionExit_triggered();
     void on_actionAbout_triggered();
     
-    // 新增的工具栏按钮槽函数
-    void on_actionBold_triggered();
-    void on_actionItalic_triggered();
-    void on_actionUnderline_triggered();
-    void on_actionCode_triggered();
-    void on_actionTitle1_triggered();
-    void on_actionPreviewMode_triggered();
+
+    
+    // 字体编辑相关槽函数
+    void on_actionFontFamily_triggered();
+    void on_actionFontSize_triggered();
+    void on_actionTextColor_triggered();
+    void on_actionTextHighlight_triggered();
+    void on_actionAlignLeft_triggered();
+    void on_actionAlignCenter_triggered();
+    void on_actionAlignRight_triggered();
+    void on_actionAlignJustify_triggered();
+    void showFontDialog();
+    
+    // 更新格式按钮状态
+    void updateFormatButtons();
 
 private:
     Ui::MainWindow *ui;                ///< UI界面
     FileHandler *m_fileHandler;        ///< 文件处理器
     EditorHandler *m_editorHandler;    ///< 编辑器处理器
-    QString m_previewContent; // 用于保存预览模式前的内容
 };
 
 #endif // MAINWINDOW_H

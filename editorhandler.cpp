@@ -5,6 +5,9 @@
 #include <QTextDocument>
 #include <QTextImageFormat>
 #include <QUrl>
+#include <QTextBlockFormat>
+#include <QFontDialog>
+#include <QColorDialog>
 
 EditorHandler::EditorHandler(QObject *parent, QTextEdit *textEdit)
     : QObject(parent),
@@ -90,4 +93,37 @@ void EditorHandler::insertImage()
     }
     
     cursor.insertImage(imageFormat);
+}
+
+void EditorHandler::setFontFamily(const QString &family)
+{
+    QTextCharFormat format;
+    format.setFontFamily(family);
+    m_textEdit->mergeCurrentCharFormat(format);
+}
+
+void EditorHandler::setFontSize(int size)
+{
+    QTextCharFormat format;
+    format.setFontPointSize(size);
+    m_textEdit->mergeCurrentCharFormat(format);
+}
+
+void EditorHandler::setTextColor(const QColor &color)
+{
+    QTextCharFormat format;
+    format.setForeground(color);
+    m_textEdit->mergeCurrentCharFormat(format);
+}
+
+void EditorHandler::setTextBackgroundColor(const QColor &color)
+{
+    QTextCharFormat format;
+    format.setBackground(color);
+    m_textEdit->mergeCurrentCharFormat(format);
+}
+
+void EditorHandler::setAlignment(Qt::Alignment alignment)
+{
+    m_textEdit->setAlignment(alignment);
 }

@@ -1,6 +1,10 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QTextCharFormat>
+#include <QFontDialog>
+#include <QColorDialog>
+#include <QInputDialog>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,13 +23,19 @@ MainWindow::MainWindow(QWidget *parent) :
     // 设置窗口标题
     setWindowTitle("笔记");
     
-    // 连接工具栏按钮信号
-    connect(ui->actionBold, &QAction::triggered, this, &MainWindow::on_actionBold_triggered);
-    connect(ui->actionItalic, &QAction::triggered, this, &MainWindow::on_actionItalic_triggered);
-    connect(ui->actionUnderline, &QAction::triggered, this, &MainWindow::on_actionUnderline_triggered);
-    connect(ui->actionCode, &QAction::triggered, this, &MainWindow::on_actionCode_triggered);
-    connect(ui->actionTitle1, &QAction::triggered, this, &MainWindow::on_actionTitle1_triggered);
-    connect(ui->actionPreviewMode, &QAction::triggered, this, &MainWindow::on_actionPreviewMode_triggered);
+
+    
+    // 连接字体编辑相关信号
+    connect(ui->actionFontDialog, &QAction::triggered, this, &MainWindow::showFontDialog);
+    connect(ui->actionAlignLeft, &QAction::triggered, this, &MainWindow::on_actionAlignLeft_triggered);
+    connect(ui->actionAlignCenter, &QAction::triggered, this, &MainWindow::on_actionAlignCenter_triggered);
+    connect(ui->actionAlignRight, &QAction::triggered, this, &MainWindow::on_actionAlignRight_triggered);
+    connect(ui->actionAlignJustify, &QAction::triggered, this, &MainWindow::on_actionAlignJustify_triggered);
+    
+
+    
+    // 连接文本光标位置变化信号，用于更新工具栏按钮状态
+    connect(ui->textEdit, &QTextEdit::cursorPositionChanged, this, &MainWindow::updateFormatButtons);
 }
 
 MainWindow::~MainWindow()
@@ -117,74 +127,90 @@ void MainWindow::on_actionInsertImage_triggered()
     m_editorHandler->insertImage();
 }
 
-void MainWindow::on_actionBold_triggered()
-{
-    QTextCharFormat format;
-    format.setFontWeight(ui->textEdit->fontWeight() == QFont::Bold ? QFont::Normal : QFont::Bold);
-    ui->textEdit->mergeCurrentCharFormat(format);
-}
 
-void MainWindow::on_actionItalic_triggered()
-{
-    QTextCharFormat format;
-    format.setFontItalic(!ui->textEdit->fontItalic());
-    ui->textEdit->mergeCurrentCharFormat(format);
-}
 
-void MainWindow::on_actionUnderline_triggered()
+void MainWindow::showFontDialog()
 {
-    QTextCharFormat format;
-    format.setFontUnderline(!ui->textEdit->fontUnderline());
-    ui->textEdit->mergeCurrentCharFormat(format);
-}
-
-void MainWindow::on_actionCode_triggered()
-{
-    QTextCursor cursor = ui->textEdit->textCursor();
-    QTextBlockFormat blockFormat = cursor.blockFormat();
-    
-    if (blockFormat.leftMargin() == 20) {
-        // 取消代码块格式
-        blockFormat.setLeftMargin(0);
-        blockFormat.setBackground(QBrush(Qt::transparent));
-    } else {
-        // 设置代码块格式
-        blockFormat.setLeftMargin(20);
-        blockFormat.setBackground(QBrush(QColor("#333333")));
+    bool ok;
+    QFont font = ui->textEdit->currentFont();
+    font = QFontDialog::getFont(&ok, font, this, "选择字体");
+    if (ok) {
+        // 设置字体族
+        m_editorHandler->setFontFamily(font.family());
+        // 设置字体大小
+        m_editorHandler->setFontSize(font.pointSize());
+        // 设置字体粗细
+        QTextCharFormat format;
+        format.setFontWeight(font.weight());
+        ui->textEdit->mergeCurrentCharFormat(format);
+        // 设置斜体
+        format.setFontItalic(font.italic());
+        ui->textEdit->mergeCurrentCharFormat(format);
+        // 设置下划线
+        format.setFontUnderline(font.underline());
+        ui->textEdit->mergeCurrentCharFormat(format);
     }
-    
-    cursor.setBlockFormat(blockFormat);
-    ui->textEdit->setTextCursor(cursor);
 }
 
-void MainWindow::on_actionTitle1_triggered()
+void MainWindow::on_actionFontFamily_triggered()
 {
-    QTextCursor cursor = ui->textEdit->textCursor();
-    QTextCharFormat format;
-    format.setFontPointSize(18);
-    format.setFontWeight(QFont::Bold);
-    cursor.select(QTextCursor::LineUnderCursor);
-    cursor.mergeCharFormat(format);
-    ui->textEdit->setTextCursor(cursor);
-}
-
-void MainWindow::on_actionPreviewMode_triggered()
-{
-    static bool isPreviewMode = false;
-    isPreviewMode = !isPreviewMode;
-    
-    if (isPreviewMode) {
-        // 保存当前内容
-        m_previewContent = ui->textEdit->toHtml();
-        // 设置为只读模式
-        ui->textEdit->setReadOnly(true);
-        // 更改背景色为更深的颜色
-        ui->textEdit->setStyleSheet("QTextEdit { background-color: #1a1a1a; color: #e0e0e0; border: 1px solid #3a3a3a; border-radius: 8px; padding: 5px; }");
-    } else {
-        // 恢复编辑模式
-        ui->textEdit->setReadOnly(false);
-        // 恢复原来的样式
-        ui->textEdit->setStyleSheet("QTextEdit { background-color: #252525; color: #e0e0e0; border: 1px solid #3a3a3a; border-radius: 8px; padding: 5px; }");
+    bool ok;
+    QString family = QFontDialog::getFont(&ok, ui->textEdit->currentFont(), this, "选择字体族").family();
+    if (ok) {
+        m_editorHandler->setFontFamily(family);
     }
+}
+
+void MainWindow::on_actionFontSize_triggered()
+{
+    bool ok;
+    int size = QInputDialog::getInt(this, "设置字号", "字号:", 
+                                  ui->textEdit->currentFont().pointSize(), 
+                                  6, 72, 1, &ok);
+    if (ok) {
+        m_editorHandler->setFontSize(size);
+    }
+}
+
+void MainWindow::on_actionTextColor_triggered()
+{
+    QColor color = QColorDialog::getColor(ui->textEdit->textColor(), this, "选择文本颜色");
+    if (color.isValid()) {
+        m_editorHandler->setTextColor(color);
+    }
+}
+
+void MainWindow::on_actionTextHighlight_triggered()
+{
+    QTextCharFormat format = ui->textEdit->currentCharFormat();
+    QColor color = QColorDialog::getColor(format.background().color(), this, "选择高亮颜色");
+    if (color.isValid()) {
+        m_editorHandler->setTextBackgroundColor(color);
+    }
+}
+
+void MainWindow::on_actionAlignLeft_triggered()
+{
+    m_editorHandler->setAlignment(Qt::AlignLeft);
+}
+
+void MainWindow::on_actionAlignCenter_triggered()
+{
+    m_editorHandler->setAlignment(Qt::AlignCenter);
+}
+
+void MainWindow::on_actionAlignRight_triggered()
+{
+    m_editorHandler->setAlignment(Qt::AlignRight);
+}
+
+void MainWindow::on_actionAlignJustify_triggered()
+{
+    m_editorHandler->setAlignment(Qt::AlignJustify);
+}
+
+void MainWindow::updateFormatButtons()
+{
+    // 由于已删除加粗、斜体和下划线按钮，此函数保留但不再需要更新这些按钮状态
 }
 

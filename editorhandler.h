@@ -57,6 +57,36 @@ public:
      * @brief 插入图片
      */
     void insertImage();
+    
+    /**
+     * @brief 设置字体族
+     * @param family 字体族名称
+     */
+    void setFontFamily(const QString &family);
+    
+    /**
+     * @brief 设置字体大小
+     * @param size 字体大小
+     */
+    void setFontSize(int size);
+    
+    /**
+     * @brief 设置文本颜色
+     * @param color 颜色
+     */
+    void setTextColor(const QColor &color);
+    
+    /**
+     * @brief 设置文本背景色
+     * @param color 颜色
+     */
+    void setTextBackgroundColor(const QColor &color);
+    
+    /**
+     * @brief 设置文本对齐方式
+     * @param alignment 对齐方式
+     */
+    void setAlignment(Qt::Alignment alignment);
 
 private:
     QTextEdit *m_textEdit;  ///< 关联的文本编辑器控件

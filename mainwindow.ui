@@ -15,40 +15,51 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QMainWindow {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
+    background-color: #f5f5f5;
+    color: #333333;
 }
 
 QMenuBar {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
-    border-bottom: 1px solid #333333;
+    background-color: #f5f5f5;
+    color: #333333;
+    border-bottom: 1px solid #e0e0e0;
+    border-radius: 4px;
 }
 
 QMenuBar::item {
     background-color: transparent;
-    padding: 4px 10px;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 4px;
 }
 
 QMenuBar::item:selected {
-    background-color: #3a3a3a;
-    color: #ffffff;
+    background-color: #e0e0e0;
+    color: #333333;
 }
 
 QMenu {
-    background-color: #2d2d2d;
-    color: #f0f0f0;
-    border: 1px solid #3a3a3a;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+QMenu::item {
+    padding: 6px 24px 6px 12px;
+    border-radius: 4px;
+    margin: 2px;
 }
 
 QMenu::item:selected {
-    background-color: #3a3a3a;
+    background-color: #e0e0e0;
 }
 
 QStatusBar {
-    background-color: #1e1e1e;
-    color: #f0f0f0;
-    border-top: 1px solid #333333;
+    background-color: #f5f5f5;
+    color: #666666;
+    border-top: 1px solid #e0e0e0;
 }</string>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -58,31 +69,33 @@ QStatusBar {
     </item>
     <item>
      <widget class="QTextEdit" name="textEdit">
-     <property name="styleSheet">
-      <string notr="true">QTextEdit {
-    background-color: #252525;
-    color: #e0e0e0;
-    border: 1px solid #3a3a3a;
-    border-radius: 8px;
-    padding: 5px;
-    font-family: "Segoe UI", sans-serif;
-    font-size: 12px;
-    selection-background-color: #3a3a3a;
+      <property name="styleSheet">
+       <string notr="true">QTextEdit {
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 10px;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    selection-background-color: #4a90e2;
     selection-color: #ffffff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 QTextEdit:hover {
-    border: 1px solid #555555;
+    border: 1px solid #4a90e2;
 }
 
 QTextEdit:focus {
-    border: 1px solid #666666;
+    border: 1px solid #4a90e2;
+    box-shadow: 0px 2px 8px rgba(74, 144, 226, 0.2);
 }</string>
-     </property>
-     <property name="placeholderText">
-      <string>在此输入文字内容...</string>
-     </property>
-    </widget>
+      </property>
+      <property name="placeholderText">
+       <string>在此输入文字内容...</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -92,7 +105,7 @@ QTextEdit:focus {
      <x>0</x>
      <y>0</y>
      <width>516</width>
-     <height>18</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -125,8 +138,25 @@ QTextEdit:focus {
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuFormat">
+    <property name="title">
+     <string>格式</string>
+    </property>
+    <addaction name="actionFontDialog"/>
+    <addaction name="actionFontFamily"/>
+    <addaction name="actionFontSize"/>
+    <addaction name="separator"/>
+    <addaction name="actionTextColor"/>
+    <addaction name="actionTextHighlight"/>
+    <addaction name="separator"/>
+    <addaction name="actionAlignLeft"/>
+    <addaction name="actionAlignCenter"/>
+    <addaction name="actionAlignRight"/>
+    <addaction name="actionAlignJustify"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
+   <addaction name="menuFormat"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -135,32 +165,41 @@ QTextEdit:focus {
    </property>
    <property name="styleSheet">
     <string notr="true">QToolBar {
-    background-color: #1e1e1e;
-    border-bottom: 1px solid #333333;
-    spacing: 3px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #e0e0e0;
+    spacing: 6px;
+    padding: 4px;
 }
 
 QToolBar::separator {
     width: 1px;
-    background-color: #333333;
-    margin: 4px 8px;
+    background-color: #e0e0e0;
+    margin: 6px 10px;
 }
 
 QToolButton {
-    background-color: transparent;
+    background-color: #f5f5f5;
     border: 1px solid transparent;
-    border-radius: 4px;
-    color: #f0f0f0;
-    padding: 3px;
+    border-radius: 8px;
+    color: #333333;
+    padding: 6px;
+    margin: 2px;
+    min-width: 32px;
+    min-height: 32px;
 }
 
 QToolButton:hover {
-    background-color: #3a3a3a;
-    border: 1px solid #555555;
+    background-color: #e0e0e0;
+    border: 1px solid #d0d0d0;
 }
 
 QToolButton:pressed {
-    background-color: #2a2a2a;
+    background-color: #d0d0d0;
+}
+
+QToolButton:checked {
+    background-color: #e6f0fa;
+    border: 1px solid #4a90e2;
 }</string>
    </property>
    <attribute name="toolBarArea">
@@ -169,14 +208,12 @@ QToolButton:pressed {
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionBold"/>
-   <addaction name="actionItalic"/>
-   <addaction name="actionUnderline"/>
+   <addaction name="actionFontDialog"/>
    <addaction name="separator"/>
-   <addaction name="actionCode"/>
-   <addaction name="actionTitle1"/>
-   <addaction name="separator"/>
-   <addaction name="actionPreviewMode"/>
+   <addaction name="actionAlignLeft"/>
+   <addaction name="actionAlignCenter"/>
+   <addaction name="actionAlignRight"/>
+   <addaction name="actionAlignJustify"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
@@ -269,6 +306,10 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionBold">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgs/icons/bold.svg</normaloff>:/imgs/icons/bold.svg</iconset>
+   </property>
    <property name="text">
     <string>加粗</string>
    </property>
@@ -280,6 +321,10 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionItalic">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgs/icons/italic.svg</normaloff>:/imgs/icons/italic.svg</iconset>
+   </property>
    <property name="text">
     <string>斜体</string>
    </property>
@@ -291,6 +336,10 @@ QToolButton:pressed {
    </property>
   </action>
   <action name="actionUnderline">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/imgs/icons/underline.svg</normaloff>:/imgs/icons/underline.svg</iconset>
+   </property>
    <property name="text">
     <string>下划线</string>
    </property>
@@ -301,37 +350,79 @@ QToolButton:pressed {
     <string>Ctrl+U</string>
    </property>
   </action>
-  <action name="actionCode">
+  <action name="actionFontDialog">
    <property name="text">
-    <string>代码块</string>
+    <string>字体</string>
    </property>
    <property name="toolTip">
-    <string>代码块</string>
+    <string>字体设置</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+C</string>
+    <string>Ctrl+F</string>
    </property>
   </action>
-  <action name="actionTitle1">
+  <action name="actionFontFamily">
    <property name="text">
-    <string>标题1</string>
+    <string>字体族</string>
    </property>
    <property name="toolTip">
-    <string>标题1</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+1</string>
+    <string>选择字体族</string>
    </property>
   </action>
-  <action name="actionPreviewMode">
+  <action name="actionFontSize">
    <property name="text">
-    <string>预览模式</string>
+    <string>字号</string>
    </property>
    <property name="toolTip">
-    <string>预览模式</string>
+    <string>选择字号</string>
    </property>
-   <property name="shortcut">
-    <string>F5</string>
+  </action>
+  <action name="actionTextColor">
+   <property name="text">
+    <string>文本颜色</string>
+   </property>
+   <property name="toolTip">
+    <string>设置文本颜色</string>
+   </property>
+  </action>
+  <action name="actionTextHighlight">
+   <property name="text">
+    <string>文本高亮</string>
+   </property>
+   <property name="toolTip">
+    <string>设置文本背景色</string>
+   </property>
+  </action>
+  <action name="actionAlignLeft">
+   <property name="text">
+    <string>左对齐</string>
+   </property>
+   <property name="toolTip">
+    <string>左对齐</string>
+   </property>
+  </action>
+  <action name="actionAlignCenter">
+   <property name="text">
+    <string>居中对齐</string>
+   </property>
+   <property name="toolTip">
+    <string>居中对齐</string>
+   </property>
+  </action>
+  <action name="actionAlignRight">
+   <property name="text">
+    <string>右对齐</string>
+   </property>
+   <property name="toolTip">
+    <string>右对齐</string>
+   </property>
+  </action>
+  <action name="actionAlignJustify">
+   <property name="text">
+    <string>两端对齐</string>
+   </property>
+   <property name="toolTip">
+    <string>两端对齐</string>
    </property>
   </action>
  </widget>
