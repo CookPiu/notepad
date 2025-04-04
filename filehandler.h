@@ -36,6 +36,13 @@ public:
     QString openFile();
 
     /**
+     * @brief 打开指定文件
+     * @param filePath 要打开的文件路径
+     * @return 如果打开成功返回true，否则返回false
+     */
+    bool openFile(const QString &filePath);
+
+    /**
      * @brief 保存文件
      * @param currentFile 当前文件路径
      * @return 如果保存成功返回true，否则返回false

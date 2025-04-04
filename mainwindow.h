@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDockWidget>
+#include <QListWidget>
 #include "filehandler.h"
 #include "editorhandler.h"
 
@@ -35,6 +37,11 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionSave_As_triggered();
     void on_actionSave_S_triggered();
+    void toggleNoteList();
+    void updateNoteList();
+    void openNoteFromList(QListWidgetItem *item);
+    void showNoteListContextMenu(const QPoint &pos);
+    void createNewNote();
     
     // 编辑操作相关槽函数
     void on_actionCopy_triggered();
@@ -69,6 +76,13 @@ private:
     Ui::MainWindow *ui;                ///< UI界面
     FileHandler *m_fileHandler;        ///< 文件处理器
     EditorHandler *m_editorHandler;    ///< 编辑器处理器
+    QDockWidget *m_noteDock;          ///< 笔记列表停靠窗口
+    QListWidget *m_noteList;          ///< 笔记列表部件
+    QString m_currentTheme;           ///< 当前主题名称
+    
+    // 主题相关函数
+    void applyTheme(const QString &themeName);
+    void setupThemes();
 };
 
 #endif // MAINWINDOW_H

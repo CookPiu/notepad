@@ -20,10 +20,18 @@ QString FileHandler::openFile()
     if (fileName.isEmpty())
         return QString();
         
-    QFile file(fileName);
+    if (openFile(fileName)) {
+        return fileName;
+    }
+    return QString();
+}
+
+bool FileHandler::openFile(const QString &filePath)
+{
+    QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QFile::Text)) {
         QMessageBox::warning(nullptr, "警告", "无法打开文件: " + file.errorString());
-        return QString();
+        return false;
     }
     
     QTextStream in(&file);
@@ -31,8 +39,8 @@ QString FileHandler::openFile()
     m_textEdit->setHtml(text);
     file.close();
     
-    m_currentFile = fileName;
-    return fileName;
+    m_currentFile = filePath;
+    return true;
 }
 
 bool FileHandler::saveFile(const QString &currentFile)
